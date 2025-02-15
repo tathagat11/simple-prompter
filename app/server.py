@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse
 from langserve import add_routes
 from app.chain import chain
 import vertexai
+import os
 
 
 vertexai.init(project="lustrous-router-450910-m2", location="us-central1")
@@ -18,5 +19,5 @@ add_routes(app, chain, path="/prompt-creator")
 
 if __name__ == "__main__":
     import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)

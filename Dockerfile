@@ -1,26 +1,30 @@
 FROM python:3.11-slim
 
-# Install Poetry
+# Install dependencies
 RUN pip install --no-cache-dir poetry
 
-# Disable Poetry virtual environments
+# Disable Poetry's virtual environment creation
 RUN poetry config virtualenvs.create false
 
 # Set working directory
 WORKDIR /code
 
-# Copy only dependency-related files first (better layer caching)
-COPY ./pyproject.toml ./README.md ./poetry.lock* ./
+COPY ./data /code/data
 
-# Install dependencies without installing the package itself
+# Copy dependency files
+COPY pyproject.toml poetry.lock* ./
+
+# Install dependencies
 RUN poetry install --no-interaction --no-ansi --no-root
 
-# Copy the rest of the application
-COPY ./packages ./packages
+# Copy application code
 COPY ./app ./app
 
-# Expose port for the application
-EXPOSE 8080
+# Expose the port (optional, for documentation purposes)
+EXPOSE 8000
 
-# Run the application using Uvicorn
-CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8080"]
+# Set environment variable for port
+ENV PORT=8000
+
+# Command to run the application
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
