@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "./simple-prompter"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [
+    { include = "app" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = "^0.23.2"
+langserve = {extras = ["server"], version = ">=0.0.30"}
+pydantic = "^2.10.6"
+langchain = "^0.3.18"
+langchain-core = "^0.3.35"
+langchain-google-vertexai = "^2.0.13"
+langsmith = "^0.3.8"
+jupyter = "^1.1.1"
+
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
