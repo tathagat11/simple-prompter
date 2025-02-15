@@ -21,10 +21,10 @@ RUN poetry install --no-interaction --no-ansi --no-root
 COPY ./app ./app
 
 # Expose the port (optional, for documentation purposes)
-EXPOSE 8000
+EXPOSE 10000
 
 # Set environment variable for port
-ENV PORT=8000
+ENV PORT=10000
 
 # Command to run the application
-CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app.server:app --host 0.0.0.0 --port ${PORT:-10000}"]
