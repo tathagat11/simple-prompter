@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from langserve import add_routes
-from app.chain import chain
+from app.chains.create_prompt_chain import chain as create_prompt_chain
 import vertexai
 import os
 
@@ -16,7 +16,7 @@ async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
 
-add_routes(app, chain, path="/prompt-creator")
+add_routes(app, create_prompt_chain, path="/prompt-creator")
 
 if __name__ == "__main__":
     import uvicorn
