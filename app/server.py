@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
 from app.chains.create_prompt_chain import chain as create_prompt_chain
+from app.chains.generate_response_chain import chain as generate_response_chain
 from app.utils.helpers import extract_template_and_variables
 import vertexai
 import os
@@ -29,14 +30,22 @@ async def health():
     return {"status": "ok"}
 
 @app.post("/prompt-creator/invoke")
-async def invoke(request_data: dict):
+async def prompt_creator_invoke(request_data: dict):
     objective = request_data["input"]["objective"]
     llm_output = create_prompt_chain.invoke({"objective": objective})
     extracted_data = extract_template_and_variables(llm_output)
     return JSONResponse(extracted_data)
 
+@app.post("/generate-response/invoke")
+async def generate_response_invoke(request_data: dict):
+    prompt_template = request_data["input"]["promptTemplate"]
+    input_variables = request_data["input"]["variables"]
+    formatted_prompt = prompt_template.format(**input_variables)
+    llm_response = generate_response_chain.invoke({"promptTemplate": formatted_prompt})
+    return JSONResponse({"llm_response": llm_response})
 
 add_routes(app, create_prompt_chain, path="/prompt-creator")
+add_routes(app, generate_response_chain, path="/generate-response")
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,4 +1,4 @@
-"""This is a simple prompter experiment"""
+"""Chain to create prompts."""
 
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -27,6 +27,7 @@ Return answer in the following format:
 This is my objective:
 {objective}
 Return only a singular specific prompt for the objective, not the code to generate the prompt.
+IMPORTANT: Each input variable should be in the form of legal python variable name.
 """.strip()
 
 prompt = PromptTemplate.from_template(template=TEMPLATE)
